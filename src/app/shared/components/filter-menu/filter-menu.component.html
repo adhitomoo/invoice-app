@@ -1,0 +1,40 @@
+<ng-container>
+  <div class="relative">
+    <a class="flex flex-row gap-4 items-center" href="javascript:void(0)" (click)="openMenu()">
+      <div class="font-bold text-2xl text-deep-black dark:text-white">{{ title }}</div>
+      <img src="/assets/icon-arrow-down.svg" alt="icon-arrow" class="w-5 transition-all" [class]="menuActive ? 'rotate-180' : 'rotate-0'">
+    </a>
+
+    <div *ngIf="menuActive" class="filter-menu absolute top-18 -left-20 right-0 w-80 p-8 bg-white rounded-xl z-999 shadow-2xl">
+      <div class="flex flex-col gap-6">
+        <div class="flex flex-row gap-4 items-center">
+          <label class="container">Draft
+            <input type="checkbox"
+                   [(ngModel)]="filterStatus.draft"
+                   (change)="onFilter()">
+            <span class="checkmark"></span>
+          </label>
+        </div>
+
+        <div class="flex flex-row gap-4 items-center">
+          <label class="container">Pending
+            <input type="checkbox"
+                   [(ngModel)]="filterStatus.pending"
+                   (change)="onFilter()">
+            <span class="checkmark"></span>
+          </label>
+        </div>
+
+        <div class="flex flex-row gap-4 items-center">
+          <label class="container">Paid
+            <input type="checkbox"
+                   [(ngModel)]="filterStatus.paid"
+                   (change)="onFilter()">
+            <span class="checkmark"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ng-container>

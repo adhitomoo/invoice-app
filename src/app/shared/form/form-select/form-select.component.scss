@@ -1,0 +1,29 @@
+.custom-select select {
+  padding: 1.15rem;
+  appearance: none;
+}
+.custom-select select option {
+  appearance: none;
+  background-color: #f5f5f5;
+  color: #333;
+  padding: 15px;
+}
+
+.progress {
+  animation: progress 1s infinite linear;
+}
+
+.left-right {
+  transform-origin: 0% 50%;
+}
+@keyframes progress {
+  0% {
+    transform:  translateX(0) scaleX(0);
+  }
+  40% {
+    transform:  translateX(0) scaleX(0.4);
+  }
+  100% {
+    transform:  translateX(100%) scaleX(0.5);
+  }
+}

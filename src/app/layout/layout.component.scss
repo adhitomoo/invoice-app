@@ -1,0 +1,51 @@
+.switch-parabola-sun {
+  animation: animate-off .5s linear alternate;
+}
+
+.switch-parabola-dark {
+  animation: animate-on .5s linear alternate;
+}
+
+@keyframes animate-off {
+  0% {
+    transform: rotate(0) translate(0);
+    opacity: 1;
+  }
+
+  50% {
+    transform: rotate(50deg) translate(180px);
+    opacity: 0;
+  }
+
+  75% {
+    transform: rotate(-50deg) translate(-180px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: rotate(0) translate(0);
+    opacity: 1;
+  }
+}
+
+@keyframes animate-on {
+  0% {
+    transform: rotate(0) translate(0);
+    opacity: 1;
+  }
+
+  50% {
+    transform: rotate(-50deg) translate(-180px);
+    opacity: 0;
+  }
+
+  75% {
+    transform: rotate(50deg) translate(180px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: rotate(0) translate(0);
+    opacity: 1;
+  }
+}

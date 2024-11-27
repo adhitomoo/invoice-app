@@ -1,0 +1,15 @@
+<div class="mb-6">
+  <label for="large-input" class="block mb-2 text-xl font-medium text-accent-secondary dark:text-white">{{ title }}</label>
+  <div class="relative">
+    <input
+      [(ngModel)]="value"
+      (ngModelChange)="change($event)"
+      type="text"
+      id="large-input"
+      readonly
+      [matDatepicker]="picker"
+      class="block w-full font-bold text-xl p-4 text-gray-900 border focus:border-2 border-accent-secondary rounded-lg bg-white focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary">
+    <mat-datepicker-toggle class="absolute top-0 bottom-0 right-2" matIconSuffix [for]="picker"></mat-datepicker-toggle>
+  </div>
+  <mat-datepicker #picker></mat-datepicker>
+</div>

@@ -1,0 +1,13 @@
+::ng-deep .custom-dialog {
+  position: absolute !important;
+  left: 0;
+  bottom: 0;
+  height: calc(100% - 50px);
+  .mat-mdc-dialog-container {
+    .mat-mdc-dialog-inner-container {
+      .mat-mdc-dialog-surface {
+        border-radius: 0 20px 20px 0 !important;
+      }
+    }
+  }
+}

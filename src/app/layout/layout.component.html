@@ -1,0 +1,59 @@
+<ng-container>
+
+  <div
+    [class]="layout !== 'desktop' ? 'flex-col w-full' : 'flex-row h-full'"
+    class="flex flex-auto bg-transparent relative h-full max-h-full">
+    @if (layout !== 'desktop') {
+      <div
+        class="flex flex-row items-center justify-between bg-primary-black"
+        style="z-index: 1200; height: 80px">
+        <div class="flex items-center justify-center">
+          <img [ngSrc]="'/assets/icon-with-bg.svg'" [width]="80" [height]="80" alt="company-logo">
+        </div>
+        <div class="flex flex-row gap-16 mx-16 justify-end items-center w-fit">
+          <button id="toggleDarkModeResponsive" class="flex justify-center items-center my-20" (click)="switchDark()">
+            <img [ngSrc]="darkIcon" [width]="32" [height]="32" alt="dark-logo">
+          </button>
+
+          <div class="h-1/6 flex items-center justify-center">
+            <div class="rounded-full overflow-hidden">
+              <img [ngSrc]="'/assets/image-avatar.jpg'" [width]="32" [height]="32" alt="profile-picture" priority>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    }
+
+    @else {
+    <div
+      class="flex justify-between bg-primary-black rounded-tr-3xl rounded-br-3xl overflow-hidden absolute top-0 bottom-0 left-0 w-40 flex-col"
+      style="z-index: 1200">
+      <div class="flex flex-col justify-between h-full">
+        <div class="bg-primary h-40 flex items-center justify-center">
+          <img [ngSrc]="'/assets/logo.svg'" [width]="40" [height]="40" alt="company-logo">
+        </div>
+
+        <button id="toggleDarkMode" class="flex justify-center items-center my-20" (click)="switchDark()">
+          <img [ngSrc]="darkIcon" [width]="40" [height]="40" alt="dark-logo">
+        </button>
+      </div>
+      <div class="h-1/6 flex items-center justify-center border-t border-t-accent-gray">
+        <div class="rounded-full overflow-hidden">
+          <img [ngSrc]="'/assets/image-avatar.jpg'" [width]="50" [height]="50" alt="profile-picture" priority>
+        </div>
+      </div>
+    </div>
+    }
+
+    <div class="w-full h-full bg-light-bg dark:bg-deep-black">
+      <div
+        class="w-full h-full m-auto relative"
+        [class]="layout !== 'desktop' ? 'left-0 max-w-full px-8 py-20' : 'left-20 max-w-3/4 py-40'"
+      >
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+
+</ng-container>

@@ -1,0 +1,64 @@
+<ng-container>
+  <div class="flex flex-col gap-8 h-full">
+    <div class="flex flex-row flex-auto items-center w-full">
+      <div class="md:max-w-3/5 sm:max-w-full w-full">
+        <h2 class="md:text-8xl sm:text-6xl text-4xl font-bold text-deep-black dark:text-white">{{ 'Invoices' }}</h2>
+        <span class="text-xl text-accent-gray dark:text-white">
+          {{ invoices.length && layout !== 'phone' ? 'There are total ' + invoices.length + ' invoice' :
+              invoices.length && layout === 'phone' ? invoices.length + ' invoice' :
+                'No Invoices'
+          }}
+        </span>
+      </div>
+
+      <div  class="flex flex-row gap-10 items-center justify-end max-w-2/5 w-full">
+        <filter-menu [title]="'Filter by Status'" (onChangeValue)="onFilter($event)"></filter-menu>
+
+        <div>
+          <button class="bg-primary min-[320]:w-50 text-accent-white rounded-full h-20 flex items-center hover:bg-secondary transition-all md:x-[w-60,px-8,gap-4] xs:x-[w-36,px-2,gap-2]" (click)="onCreateInvoice()">
+            <div class="w-12 h-12 rounded-full bg-white flex justify-center items-center">
+              <img [ngSrc]="'/assets/icon-plus.svg'" alt="plus-icon" [width]="12" [height]="12">
+            </div>
+            <span class="text-2xl font-bold text-white">New {{ layout === 'desktop' ? 'Invoice' : null }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-4 items-center h-full overflow-auto" [class.justify-center]="!filteredInvoice.length">
+      @if (filteredInvoice.length) {
+        @for (invoice of filteredInvoice; track invoice) {
+          <a href="javascript:void(0)" class="bg-white dark:bg-secondary-black p-8 rounded-xl hover:bg-accent-white dark:hover:bg-primary-black transition-all w-full" (click)="toDetail(invoice.id)">
+            <div class="flex flex-row justify-between gap-4 items-center relative">
+              <div class="font-bold text-deep-black dark:text-white text-2xl w-full max-w-1/4">#{{ invoice.id }}</div>
+              <div class="text-accent-gray dark:text-accent-white text-lg w-full max-w-1/4">Due {{  invoice?.paymentDue | date: 'dd MMM yyyy' || '-' }}</div>
+              <div class="text-accent-gray dark:text-accent-white text-lg w-full max-w-1/4">{{ invoice?.clientName || '-'}}</div>
+              <div class="font-bold text-deep-black dark:text-white text-2xl w-full max-w-1/4">{{ invoice?.total | currency: 'GBP' || '-'}}</div>
+              <div class="w-full rounded-lg bg-green-100 flex items-center justify-center gap-2 p-3 max-w-1/4" [class]="invoice.status | invoiceStatus: 'bg-light'">
+                <div class="w-3 h-3 flex items-center justify-center rounded-full" [class]="invoice.status | invoiceStatus: 'bg'"></div>
+                <span class="font-bold text-2xl" [class]="invoice.status | invoiceStatus: 'text-color'">
+                {{ invoice.status | invoiceStatus: 'text' }}
+              </span>
+              </div>
+
+              <div class="w-1/5 relative flex justify-end">
+                <img [ngSrc]="'/assets/icon-arrow-right.svg'" [width]="7" [height]="7" alt="icon-forward">
+              </div>
+            </div>
+          </a>
+        }
+      } @else {
+        <div class="flex flex-col gap-15">
+          <img [ngSrc]="'./assets/illustration-empty.svg'" [width]="480" [height]="380" priority>
+          <div class="text-center">
+            <div class="font-bold text-4xl mb-10 dark:text-white">There is nothing here</div>
+            <span class="text-accent-gray text-2xl">
+              Create an invoice by clicking the <br>
+              New Invoice button and get started
+            </span>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</ng-container>

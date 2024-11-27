@@ -1,6 +1,7 @@
 const path = require('path');
 const colors = require('tailwindcss/colors');
 const defaultTheme = require('tailwindcss/defaultTheme');
+const plugin = require("tailwindcss/plugin");
 // const generatePalette = require(path.resolve(__dirname, ('src/@fuse/tailwind/utils/generate-palette')));
 
 /**
@@ -41,7 +42,7 @@ const themes = {
  * Tailwind configuration
  */
 const config = {
-  darkMode   : 'class',
+  darkMode   : 'selector',
   content    : ['./src/**/*.{html,scss,ts}'],
   important  : true,
   theme      : {
@@ -63,6 +64,7 @@ const config = {
       '10xl': '8rem'
     },
     screens : {
+      xs: '360px',
       sm: '600px',
       md: '960px',
       lg: '1280px',
@@ -71,6 +73,16 @@ const config = {
     extend  : {
       animation               : {
         'spin-slow': 'spin 3s linear infinite'
+      },
+      keyframes: {
+        progress: {
+          '0%': { transform: ' translateX(0) scaleX(0)' },
+          '40%': { transform: 'translateX(0) scaleX(0.4)' },
+          '100%': { transform: 'translateX(100%) scaleX(0.5)' },
+        },
+      },
+      transformOrigin: {
+        'left-right': '0% 50%',
       },
       colors                  : {
         gray: colors.slate,
@@ -176,7 +188,7 @@ const config = {
       transitionTimingFunction: {
         'drawer': 'cubic-bezier(0.25, 0.8, 0.25, 1)'
       },
-    }
+    },
   },
   corePlugins: {
     appearance        : false,
@@ -189,7 +201,16 @@ const config = {
   },
   plugins    : [
     // Other third party and/or custom plugins
-    require('@tailwindcss/typography')({modifiers: ['sm', 'lg']})
+    // require('@tailwindcss/typography')({modifiers: ['sm', 'lg']})
+    plugin(function({ matchUtilities }) {
+      matchUtilities(
+        {
+          'x': (value) => ({
+            [`@apply ${value.replaceAll(',', ' ')}`]: {}
+          })
+        }
+      )
+    })
   ]
 };
 

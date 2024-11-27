@@ -1,0 +1,49 @@
+<div class="mb-6 relative">
+  <label class="block mb-2 text-xl font-medium text-accent-secondary dark:text-white">{{ title }}</label>
+  <div class="relative overflow-hidden max-w-full block w-full text-gray-900 border group-focus:border-2 border-accent-secondary rounded-lg bg-white text-base group-focus:ring-primary group-focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary">
+    <input
+      #selected
+      [(ngModel)]="value"
+      (ngModelChange)="change($event)"
+      (click)="onShowOption()"
+      class="group outline-none font-bold text-xl max-w-fit h-15 indent-4"
+      type="text"
+      [disabled]="loading"
+      id="large-input">
+
+    @if (loading) {
+      <div class='w-full'>
+        <div class='h-1.5 w-full bg-pink-100 overflow-hidden'>
+          <div class='progress w-full h-full bg-primary left-right'></div>
+        </div>
+      </div>
+    }
+  </div>
+  @if (showOption) {
+    <div class="absolute w-full top-25 right-0 left-0 bg-white rounded-xl max-h-64 overflow-auto z-99" #menuSelect>
+      <ul class="m-0 overflow-auto shadow-2xl">
+        @if (filteredItems.length) {
+          @for (item of filteredItems; track item) {
+            <a href="javascript:void(0)" class="outline-none" (click)="onSelect(item)">
+              <li class="list-none border-b border-accent-white p-4 font-bold text-2xl hover:text-primary transition-all">{{ item[itemName] }}</li>
+            </a>
+          }
+        } @else {
+          <li class="list-none border-b border-accent-white p-4 font-bold text-2xl text-primary transition-all">{{ 'Dont have any Items' }}</li>
+        }
+
+      </ul>
+    </div>
+  }
+<!--  <select-->
+<!--    [(ngModel)]="value"-->
+<!--    (ngModelChange)="change($event)"-->
+<!--    id="select-input"-->
+<!--    class="block appearance-none w-full text-gray-900 border focus:border-2 border-accent-secondary rounded-lg bg-white text-base focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"-->
+<!--  >-->
+<!--    @for (item of items; track item) {-->
+<!--      <option [value]="itemValue">{{ item[itemName] }}</option>-->
+<!--    }-->
+<!--  </select>-->
+</div>
+
