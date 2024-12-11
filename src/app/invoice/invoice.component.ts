@@ -12,7 +12,7 @@ import {FilterMenuComponent} from "../shared/components/filter-menu/filter-menu.
 @Component({
   selector: 'invoice',
   standalone: true,
-  imports: [RouterOutlet, NgOptimizedImage, invoiceStatusPipe, DatePipe, CurrencyPipe, RouterLink, MatDialogModule, NgIf, FilterMenuComponent],
+  imports: [NgOptimizedImage, invoiceStatusPipe, DatePipe, CurrencyPipe, MatDialogModule, FilterMenuComponent],
   providers: [invoiceStatusPipe, DatePipe, AppService, InvoiceService],
   templateUrl: './invoice.component.html',
   styleUrls: ['./invoice.component.scss']
@@ -45,21 +45,21 @@ export class InvoiceComponent implements OnInit{
 
   public onCreateInvoice() {
     const configDesktop: MatDialogConfig = {
-      position: {
-        left: '80px',
-        top: '0',
-        bottom: '0',
-      },
-      minHeight: '100%',
-      height: '100%',
-      width: '50%'
+      panelClass: 'desktop-dialog',
+
     }
 
-    const configResponsive: MatDialogConfig = {
-      panelClass: 'custom-dialog',
+    const configTablet: MatDialogConfig = {
+      panelClass: 'tablet-dialog',
     }
 
-    const dialogConfig = this.layout !== 'desktop' ? configResponsive : configDesktop
+    const configPhone: MatDialogConfig = {
+      panelClass: 'phone-dialog',
+    }
+
+    const dialogConfig = this.layout === 'desktop' ? configDesktop :
+        this.layout === 'tablet' ? configTablet :
+        configPhone;
 
     const modelRef = this.dialog.open(CreateInvoiceComponent, dialogConfig);
 
@@ -77,7 +77,7 @@ export class InvoiceComponent implements OnInit{
 
   private fetchInvoice() {
     this.invoices = this._appService.getData();
-    this.filteredInvoice = this.invoices;
+    this.filteredInvoice = this.invoices.reverse();
   }
 
   public onFilter(status: any) {

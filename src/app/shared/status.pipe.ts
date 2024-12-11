@@ -62,13 +62,15 @@ export class invoiceStatusPipe implements PipeTransform
       if(arg && arg === 'bg') {
         return 'bg-gray-500'
       }
+
       if(arg && arg === 'bg-light') {
         return 'bg-gray-100 dark:bg-gray-100/10'
-
       }
+
       if(arg && arg === 'text-color') {
         return 'text-gray-500 dark:text-white'
       }
+
       if(arg && arg === 'text') {
         return 'Draft'
       }

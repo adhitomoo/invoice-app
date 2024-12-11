@@ -1,6 +1,6 @@
-  <div class="flex flex-col gap-15 pt-20 max-h-full overflow-hidden dark:bg-deep-black">
-    <h2 class="font-bold text-4xl dark:text-white ps-26">{{ type === 'new' ? 'New Invoice' : 'Edit #' + invoice?.id }}</h2>
-    <form [formGroup]="formInvoice" class="overflow-auto h-4/5 pe-20 ps-26">
+  <div class="flex flex-col gap-15 md:pt-0 pt-26 max-h-full overflow-hidden dark:bg-deep-black">
+    <h2 class="font-bold text-4xl dark:text-white md:ps-26 ps-8">{{ type === 'new' ? 'New Invoice' : 'Edit #' + invoice?.id }}</h2>
+    <form [formGroup]="formInvoice" class="overflow-auto h-4/5 pe-10 md:ps-26 ps-8">
       <div class="flex flex-col gap-8">
         <div [formGroupName]="'billFrom'" #billFrom>
           <h4 class="font-bold text-primary text-2xl mb-6">Bill From</h4>
@@ -58,7 +58,7 @@
           </div>
 
           <div class="mb-6">
-            <form-input-text title="Client's Name" [formControlName]="'clients_email'"></form-input-text>
+            <form-input-text title="Client's Email" [formControlName]="'clients_email'"></form-input-text>
             <div *ngIf="formInvoice.get('billTo.clients_email')?.errors && formInvoice.get('billTo.clients_email')?.errors?.['email']" class="text-red-600 fw-bold">
               Email invalid
             </div>
@@ -128,39 +128,105 @@
         <div [formArrayName]="'items'">
           <h4 class="text-accent-gray text-3xl mb-6 font-bold">Item List</h4>
 
-          <table class="w-full mb-6">
-            <thead>
-              <tr>
-                <th class="text-accent-secondary text-xl font-normal w-auto text-left">Item Name</th>
-                <th class="text-accent-secondary text-xl font-normal w-20 text-left">Qty</th>
-                <th class="text-accent-secondary text-xl font-normal w-1/5 text-left">Price</th>
-                <th class="text-accent-secondary text-xl font-normal w-1/5 text-left">Total</th>
-                <th class="w-16"></th>
-              </tr>
-            </thead>
+          <div class="w-full mb-6">
+            @if (layout !== 'phone') {
+              <table class="w-full">
+                <thead>
+                  <tr>
+                    <th class="text-accent-secondary text-xl font-normal w-auto text-left">Item Name</th>
+                    <th class="text-accent-secondary text-xl font-normal w-20 text-left">Qty</th>
+                    <th class="text-accent-secondary text-xl font-normal w-1/5 text-left">Price</th>
+                    <th class="text-accent-secondary text-xl font-normal w-1/5 text-left">Total</th>
+                    <th class="w-16"></th>
+                  </tr>
+                </thead>
 
-            <tbody>
-                <tr *ngFor="let itemArray of formArray.controls; let i = index" [formGroupName]="i">
-                  <td class="pe-4">
-                    <form-input-text [formControlName]="'item'"></form-input-text>
-                  </td>
-                  <td class="pe-4">
-                    <form-input-text [formControlName]="'qty'"></form-input-text>
-                  </td>
-                  <td class="pe-4">
-                    <form-currency [formControlName]="'price'"></form-currency>
-                  </td>
-                  <td>
-                    <form-currency [formControlName]="'total'"></form-currency>
-                  </td>
-                  <td class="text-right">
-                    <button (click)="deleteItem(i)">
-                      <mat-icon>delete</mat-icon>
-                    </button>
-                  </td>
-                </tr>
-            </tbody>
-          </table>
+                <tbody>
+                    <tr *ngFor="let itemArray of formArray.controls; let i = index" [formGroupName]="i">
+                      <td class="pe-4">
+                        <form-input-text [formControlName]="'name'"></form-input-text>
+                      </td>
+                      <td class="pe-4">
+                        <form-input-text [formControlName]="'quantity'"></form-input-text>
+                      </td>
+                      <td class="pe-4">
+                        <form-currency [formControlName]="'price'"></form-currency>
+                      </td>
+                      <td>
+                        <form-currency [formControlName]="'total'"></form-currency>
+                      </td>
+                      <td class="text-right">
+                        <button (click)="deleteItem(i)">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </td>
+                    </tr>
+                </tbody>
+              </table>
+            }
+
+            @if (layout === 'phone') {
+              <div *ngFor="let itemArray of formArray.controls; let i = index" [formGroupName]="i">
+                <div class="flex flex-col gap-4 w-full mb-12">
+                  <div class="flex flex-col flex-wrap flex-auto w-full min-w-full max-w-full">
+                    <h6 class="font-light text-accent-gray">Item Name</h6>
+                    <form-input-text [formControlName]="'name'"></form-input-text>
+                  </div>
+
+                  <table class="w-full">
+                    <thead>
+                      <tr>
+                        <th class="text-accent-secondary text-xl font-normal w-20 text-left">Qty.</th>
+                        <th class="text-accent-secondary text-xl font-normal w-1/5 text-left">Price</th>
+                        <th class="text-accent-secondary text-xl font-normal w-1/5 text-left">Total</th>
+                        <th class="w-16"></th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                          <td class="pe-4 w-1/4">
+                            <form-input-text [formControlName]="'quantity'"></form-input-text>
+                          </td>
+                          <td class="pe-4 w-1/3">
+                            <form-currency [formControlName]="'price'"></form-currency>
+                          </td>
+                          <td class="w-1/3">
+                            <div class="text-2xl font-bold text-accent-gray py-6">{{ itemArray.get('total')?.value | currency:'GBP' }}</div>
+                          </td>
+                          <td class="text-right w-1/4">
+                            <button (click)="deleteItem(i)">
+                              <mat-icon>delete</mat-icon>
+                            </button>
+                          </td>
+                        </tr>
+                    </tbody>
+                  </table>
+
+                  <!-- <div class="flex flex-row gap-4 items-center">
+                    <div class="w-1/4">
+                      <h6 class="font-light text-accent-gray">Qty.</h6>
+                      <form-input-text [formControlName]="'qty'"></form-input-text>
+                    </div>
+                    <div class="w-1/2">
+                      <h6 class="font-light text-accent-gray">Price</h6>
+                      <form-currency [formControlName]="'price'"></form-currency>
+                    </div>
+                    <div class="w-1/4">
+                      <h6 class="font-light text-accent-gray">Total</h6>
+                      <div class="text-2xl font-bold text-accent-gray py-6">{{ itemArray.get('total')?.value | currency:'GBP' }}</div>
+                    </div>
+                    <div class="w-1/4 text-end py-6">
+                      <button (click)="deleteItem(i)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+                  </div> -->
+                </div>
+              </div>
+            }
+          </div>
+
           <button class="bg-accent-white dark:bg-primary-black text-accent-gray dark:text-white font-bold rounded-full text-2xl text-center justify-center flex items-center w-full py-4" (click)="addArray()">
             <mat-icon class="me-2">add</mat-icon>
             <span>Add New Item</span>
@@ -174,24 +240,24 @@
           {{ 'Cancel' }}
         </button>
 
-        <button class="bg-error-light text-white dark:text-white font-bold rounded-full text-2xl text-center justify-center flex items-center w-1/3" (click)="onSave()">
+        <button class="bg-error-light text-white dark:text-white font-bold rounded-full text-2xl text-center justify-center flex items-center w-1/2" (click)="onSave()">
           {{ 'Save Changes' }}
         </button>
       </div>
     }
 
     @if(type === 'new') {
-      <div class="flex flex-row gap-4 w-full" [class]="layout !== 'desktop' ? 'bg-white p-10 drop-shadow-2xl h-36 justify-center' : 'h-18 pe-20 ps-26 justify-between'">
+      <div class="flex flex-row gap-4 w-full" [class]="layout !== 'desktop' ? 'bg-white p-10 drop-shadow-2xl h-36 justify-center' : 'h-18 pe-10 pb-4 ps-26 justify-between'">
         <button class="bg-accent-white text-accent-gray dark:bg-primary-black dark:text-white font-bold rounded-full text-xl text-center justify-center flex items-center" [class]="layout !== 'desktop' ? 'w-1/3' : 'w-1/4'" (click)="onBack()">
           Discard
         </button>
 
         <div class="flex flex-row gap-2 justify-end" [class]="layout !== 'desktop' ? 'w-full' : 'w-80'">
-          <button class="bg-accent-black text-accent-secondary dark:text-white font-bold rounded-full text-xl text-center justify-center flex items-center w-full" (click)="onSave()">
+          <button class="bg-accent-black text-accent-secondary dark:text-white font-bold rounded-full text-xl text-center justify-center flex items-center w-full" (click)="onSave('draft')">
             {{ 'Save as Draft' }}
           </button>
 
-          <button class="bg-error-light text-white dark:text-white font-bold rounded-full text-xl text-center justify-center flex items-center w-full" (click)="onSave()">
+          <button class="bg-error-light text-white dark:text-white font-bold rounded-full text-xl text-center justify-center flex items-center w-full" (click)="onSave('pending')">
             {{ 'Save and Send' }}
           </button>
         </div>

@@ -13,7 +13,7 @@ import {
   ReactiveFormsModule,
   Validators
 } from "@angular/forms";
-import {JsonPipe, NgForOf, NgIf} from "@angular/common";
+import {CurrencyPipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
 import {FormSelectComponent} from "../../shared/form/form-select/form-select.component";
 // the `default as` syntax.
 import * as _moment from 'moment';
@@ -33,14 +33,13 @@ const moment = _rollupMoment || _moment;
   standalone: true,
   imports: [
     MatDialogModule,
-    MatLabel,
     MatFormFieldModule,
     MatInputModule,
     FormInputTextComponent,
     FormDatepickerComponent,
     MatIcon,
     ReactiveFormsModule,
-    JsonPipe,
+    CurrencyPipe,
     FormSelectComponent,
     NgForOf,
     FormCurrencyComponent,
@@ -138,8 +137,8 @@ export class CreateInvoiceComponent implements OnInit, AfterViewInit, OnDestroy 
         })
         this.invoice.items.forEach((val: any) => {
           const item: FormGroup = this.fb.group({
-            item  : new FormControl(val.name, [Validators.required]),
-            qty   : new FormControl(val.quantity, [Validators.required, this._validateService.ValidateNumber]),
+            name  : new FormControl(val.name, [Validators.required]),
+            quantity   : new FormControl(val.quantity, [Validators.required, this._validateService.ValidateNumber]),
             price : new FormControl(val.price, [Validators.required, this._validateService.ValidateNumber]),
             total : new FormControl(val.total, [Validators.required, this._validateService.ValidateNumber]),
           })
@@ -194,7 +193,7 @@ export class CreateInvoiceComponent implements OnInit, AfterViewInit, OnDestroy 
       // Modify the value of 'items' here
       const modifiedData = val.map((item: any) => {
         // Modify each item as needed
-        return { ...item, total: item.price * parseInt(item.qty) }
+        return { ...item, total: item.price * parseInt(item.quantity) }
       });
 
       this.formInvoice.get('items')?.patchValue(modifiedData, { emitEvent: false });
@@ -218,8 +217,8 @@ export class CreateInvoiceComponent implements OnInit, AfterViewInit, OnDestroy 
 
   public addArray() {
     const item: FormGroup = this.fb.group({
-      item  : new FormControl('', [Validators.required]),
-      qty   : new FormControl(0, [Validators.required, this._validateService.ValidateNumber]),
+      name  : new FormControl('', [Validators.required]),
+      quantity   : new FormControl(0, [Validators.required, this._validateService.ValidateNumber]),
       price : new FormControl(0, [Validators.required, this._validateService.ValidateNumber]),
       total : new FormControl(0, [Validators.required, this._validateService.ValidateNumber]),
     })
@@ -232,9 +231,9 @@ export class CreateInvoiceComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
 
-  public onSave(): void {
+  public onSave(status?: string): void {
     if(this.type === 'new') {
-      this.create();
+      this.create(status);
     }
 
     if(this.type === 'edit') {
@@ -244,7 +243,7 @@ export class CreateInvoiceComponent implements OnInit, AfterViewInit, OnDestroy 
     this.dialog.close(true);
   }
 
-  public create() {
+  public create(status?: string) {
     const formValue = this.formInvoice.value;
     const date = moment(new Date, 'yyyy-mm-dd HH:mm:ss').valueOf();
 
@@ -256,7 +255,7 @@ export class CreateInvoiceComponent implements OnInit, AfterViewInit, OnDestroy 
       payment_terms: formValue?.billTo?.payment_terms,
       clientName: formValue?.billTo?.clients_name,
       clientEmail: formValue?.billTo?.clients_email,
-      status: 'pending',
+      status: status,
       senderAddress: {
         street: formValue?.billFrom?.street_address,
         city: formValue?.billFrom?.city,
@@ -348,37 +347,4 @@ export class CreateInvoiceComponent implements OnInit, AfterViewInit, OnDestroy 
   public onBack() {
     this.dialog.close();
   }
-
-// {
-//   "id": "RT3080",
-//   "createdAt": "2021-08-18",
-//   "paymentDue": "2021-08-19",
-//   "description": "Re-branding",
-//   "paymentTerms": 1,
-//   "clientName": "Jensen Huang",
-//   "clientEmail": "jensenh@mail.com",
-//   "status": "paid",
-//   "senderAddress": {
-//     "street": "19 Union Terrace",
-//     "city": "London",
-//     "postCode": "E1 3EZ",
-//     "country": "United Kingdom"
-//   },
-//   "clientAddress": {
-//     "street": "106 Kendell Street",
-//     "city": "Sharrington",
-//     "postCode": "NR24 5WQ",
-//     "country": "United Kingdom"
-//   },
-//   "items": [
-//     {
-//       "name": "Brand Guidelines",
-//       "quantity": 1,
-//       "price": 1800.90,
-//       "total": 1800.90
-//     }
-//   ],
-//   "total": 1800.90
-// },
-
 }
